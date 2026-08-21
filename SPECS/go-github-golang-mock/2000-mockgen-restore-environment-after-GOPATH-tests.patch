@@ -1,0 +1,57 @@
+From 246e57347181a8bcdd097e84668f9bb2c3d2fa1b Mon Sep 17 00:00:00 2001
+From: HNO3Miracle <xiangao.or@isrc.iscas.ac.cn>
+Date: Mon, 17 Aug 2026 04:39:57 +0800
+Subject: [PATCH] mockgen: restore environment after GOPATH tests
+
+Use testing.T.Setenv so temporary GOPATH and module-mode settings do not leak
+into later mockgen tests after their temporary directories are removed.
+
+Signed-off-by: HNO3Miracle <xiangao.or@isrc.iscas.ac.cn>
+---
+ mockgen/mockgen_test.go | 24 ++++--------------------
+ 1 file changed, 4 insertions(+), 20 deletions(-)
+
+diff --git a/mockgen/mockgen_test.go b/mockgen/mockgen_test.go
+index 5556600..f5d5f12 100644
+--- a/mockgen/mockgen_test.go
++++ b/mockgen/mockgen_test.go
+@@ -383,16 +383,8 @@ func TestParsePackageImport_FallbackGoPath(t *testing.T) {
+ 	if err != nil {
+ 		t.Error(err)
+ 	}
+-	key := "GOPATH"
+-	value := goPath
+-	if err := os.Setenv(key, value); err != nil {
+-		t.Fatalf("unable to set environment variable %q to %q: %v", key, value, err)
+-	}
+-	key = "GO111MODULE"
+-	value = "on"
+-	if err := os.Setenv(key, value); err != nil {
+-		t.Fatalf("unable to set environment variable %q to %q: %v", key, value, err)
+-	}
++	t.Setenv("GOPATH", goPath)
++	t.Setenv("GO111MODULE", "on")
+ 	pkgPath, err := parsePackageImport(srcDir)
+ 	expected := "example.com/foo"
+ 	if pkgPath != expected {
+@@ -433,16 +425,8 @@ func TestParsePackageImport_FallbackMultiGoPath(t *testing.T) {
+ 	}()
+ 
+ 	goPaths := strings.Join(goPathList, string(os.PathListSeparator))
+-	key := "GOPATH"
+-	value := goPaths
+-	if err := os.Setenv(key, value); err != nil {
+-		t.Fatalf("unable to set environment variable %q to %q: %v", key, value, err)
+-	}
+-	key = "GO111MODULE"
+-	value = "on"
+-	if err := os.Setenv(key, value); err != nil {
+-		t.Fatalf("unable to set environment variable %q to %q: %v", key, value, err)
+-	}
++	t.Setenv("GOPATH", goPaths)
++	t.Setenv("GO111MODULE", "on")
+ 	pkgPath, err := parsePackageImport(srcDir)
+ 	expected := "example.com/foo"
+ 	if pkgPath != expected {
+-- 
+2.43.0
