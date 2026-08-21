@@ -1,0 +1,40 @@
+From 54f05b0da16e78b3793ef76146cbdce4300261a1 Mon Sep 17 00:00:00 2001
+From: HNO3Miracle <xiangao.or@isrc.iscas.ac.cn>
+Date: Wed, 2 Sep 2026 17:49:33 +0800
+Subject: [PATCH] tests: support encoding/json v2 diagnostics
+
+Signed-off-by: HNO3Miracle <xiangao.or@isrc.iscas.ac.cn>
+---
+ checker_test.go | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/checker_test.go b/checker_test.go
+index 9678f40..86b22e0 100644
+--- a/checker_test.go
++++ b/checker_test.go
+@@ -1779,11 +1779,11 @@ want:
+ 	checker: qt.JSONEquals([]byte(`null`), jsonErrorMarshaler{}),
+ 	expectedCheckFailure: `
+ error:
+-  bad check: cannot marshal expected contents: json: error calling MarshalJSON for type qt_test.jsonErrorMarshaler: qt json marshal error
++  bad check: cannot marshal expected contents: json: error calling MarshalJSON for type *qt_test.jsonErrorMarshaler: qt json marshal error
+ `,
+ 	expectedNegateFailure: `
+ error:
+-  bad check: cannot marshal expected contents: json: error calling MarshalJSON for type qt_test.jsonErrorMarshaler: qt json marshal error
++  bad check: cannot marshal expected contents: json: error calling MarshalJSON for type *qt_test.jsonErrorMarshaler: qt json marshal error
+ `,
+ }, {
+ 	about:   "JSONEquals with []byte",
+@@ -1805,7 +1805,7 @@ error:
+ got:
+   []uint8("null")
+ want:
+-  json.RawMessage("null")
++  s"null"
+ `,
+ }, {
+ 	about: "CodecEquals with bad marshal",
+-- 
+2.43.0
+
