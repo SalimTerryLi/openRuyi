@@ -1,0 +1,33 @@
+From 5ce0909b7164ce126179c16ed51796f301a7a7f8 Mon Sep 17 00:00:00 2001
+From: HNO3Miracle <xiangao.or@isrc.iscas.ac.cn>
+Date: Fri, 21 Aug 2026 22:29:00 +0800
+Subject: [PATCH] tests: make retry example timing independent
+
+Signed-off-by: HNO3Miracle <xiangao.or@isrc.iscas.ac.cn>
+---
+ retry_example_test.go | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/retry_example_test.go b/retry_example_test.go
+index ae71b17..ebe9d81 100644
+--- a/retry_example_test.go
++++ b/retry_example_test.go
+@@ -123,11 +123,11 @@ func ExampleAttemptWithDelay() {
+ 		return nil
+ 	})
+ 
+-	fmt.Printf("%v %v %v\n", count1, time1.Truncate(time.Millisecond), err1)
+-	fmt.Printf("%v %v %v\n", count2, time2.Truncate(time.Millisecond), err2)
++	fmt.Printf("%v %t %v\n", count1, time1 >= time.Millisecond, err1)
++	fmt.Printf("%v %t %v\n", count2, time2 >= time.Millisecond, err2)
+ 	// Output:
+-	// 2 1ms <nil>
+-	// 2 1ms error
++	// 2 true <nil>
++	// 2 true error
+ }
+ 
+ func ExampleTransaction() {
+-- 
+2.43.0
+

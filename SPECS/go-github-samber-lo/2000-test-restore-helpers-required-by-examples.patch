@@ -1,0 +1,55 @@
+From a46a6a916adb927a93237f010ad59ed6cc7d8d89 Mon Sep 17 00:00:00 2001
+From: HNO3Miracle <xiangao.or@isrc.iscas.ac.cn>
+Date: Tue, 18 Aug 2026 23:03:49 +0800
+Subject: [PATCH] test: restore helpers required by examples
+
+Signed-off-by: HNO3Miracle <xiangao.or@isrc.iscas.ac.cn>
+---
+ example_helpers_test.go    |  9 +++++++++
+ it/example_helpers_test.go | 18 ++++++++++++++++++
+ 2 files changed, 27 insertions(+)
+ create mode 100644 example_helpers_test.go
+ create mode 100644 it/example_helpers_test.go
+
+diff --git a/example_helpers_test.go b/example_helpers_test.go
+new file mode 100644
+index 0000000..6f58267
+--- /dev/null
++++ b/example_helpers_test.go
+@@ -0,0 +1,9 @@
++package lo
++
++type foo struct {
++	bar string
++}
++
++func (f foo) Clone() foo {
++	return foo{f.bar}
++}
+diff --git a/it/example_helpers_test.go b/it/example_helpers_test.go
+new file mode 100644
+index 0000000..fdd91a5
+--- /dev/null
++++ b/it/example_helpers_test.go
+@@ -0,0 +1,18 @@
++//go:build go1.23
++
++package it
++
++import (
++	"iter"
++	"slices"
++)
++
++func values[T any](v ...T) iter.Seq[T] { return slices.Values(v) }
++
++type foo struct {
++	bar string
++}
++
++func (f foo) Clone() foo {
++	return foo{f.bar}
++}
+-- 
+2.43.0
+
