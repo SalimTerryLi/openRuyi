@@ -1,0 +1,62 @@
+From 5d04c0b8c8ee97914308ff02f68017e9f8694d67 Mon Sep 17 00:00:00 2001
+From: HNO3Miracle <xiangao.or@isrc.iscas.ac.cn>
+Date: Wed, 2 Sep 2026 17:49:33 +0800
+Subject: [PATCH] tests: validate compressed content instead of size
+
+Signed-off-by: HNO3Miracle <xiangao.or@isrc.iscas.ac.cn>
+---
+ compress_test.go | 24 ++++++++++++++++++++----
+ 1 file changed, 20 insertions(+), 4 deletions(-)
+
+diff --git a/compress_test.go b/compress_test.go
+index 25fdbe9..c392547 100644
+--- a/compress_test.go
++++ b/compress_test.go
+@@ -7,6 +7,7 @@ package handlers
+ import (
+ 	"bufio"
+ 	"bytes"
++	"compress/flate"
+ 	"compress/gzip"
+ 	"io"
+ 	"log"
+@@ -136,8 +137,17 @@ func TestCompressHandlerGzip(t *testing.T) {
+ 	if resp.Header.Get("Content-Type") != "text/plain; charset=utf-8" {
+ 		t.Errorf("wrong content type, got %s want %s", resp.Header.Get("Content-Type"), "text/plain; charset=utf-8")
+ 	}
+-	if w.Body.Len() != 72 {
+-		t.Errorf("wrong len, got %d want %d", w.Body.Len(), 72)
++	reader, err := gzip.NewReader(w.Body)
++	if err != nil {
++		t.Fatal(err)
++	}
++	defer reader.Close()
++	decompressed, err := io.ReadAll(reader)
++	if err != nil {
++		t.Fatal(err)
++	}
++	if want := bytes.Repeat([]byte("Gorilla!\n"), 1024); !bytes.Equal(decompressed, want) {
++		t.Error("gzip body did not decompress to the original content")
+ 	}
+ 	if l := resp.Header.Get("Content-Length"); l != "" {
+ 		t.Errorf("wrong content-length. got %q expected %q", l, "")
+@@ -154,8 +164,14 @@ func TestCompressHandlerDeflate(t *testing.T) {
+ 	if resp.Header.Get("Content-Type") != "text/plain; charset=utf-8" {
+ 		t.Fatalf("wrong content type, got %s want %s", resp.Header.Get("Content-Type"), "text/plain; charset=utf-8")
+ 	}
+-	if w.Body.Len() != 54 {
+-		t.Fatalf("wrong len, got %d want %d", w.Body.Len(), 54)
++	reader := flate.NewReader(w.Body)
++	defer reader.Close()
++	decompressed, err := io.ReadAll(reader)
++	if err != nil {
++		t.Fatal(err)
++	}
++	if want := bytes.Repeat([]byte("Gorilla!\n"), 1024); !bytes.Equal(decompressed, want) {
++		t.Error("deflate body did not decompress to the original content")
+ 	}
+ }
+ 
+-- 
+2.43.0
+
