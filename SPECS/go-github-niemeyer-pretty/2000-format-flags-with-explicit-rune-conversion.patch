@@ -1,0 +1,26 @@
+From 951c522e53194f4b74d642ff99565360bd8ecd01 Mon Sep 17 00:00:00 2001
+From: HNO3Miracle <xiangao.or@isrc.iscas.ac.cn>
+Date: Mon, 17 Aug 2026 08:28:16 +0800
+Subject: [PATCH] vet: make flag rune conversion explicit
+
+Signed-off-by: HNO3Miracle <xiangao.or@isrc.iscas.ac.cn>
+---
+ formatter.go | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/formatter.go b/formatter.go
+index df61d8d..bf4b598 100644
+--- a/formatter.go
++++ b/formatter.go
+@@ -37,7 +37,7 @@ func (fo formatter) passThrough(f fmt.State, c rune) {
+ 	s := "%"
+ 	for i := 0; i < 128; i++ {
+ 		if f.Flag(i) {
+-			s += string(i)
++			s += string(rune(i))
+ 		}
+ 	}
+ 	if w, ok := f.Width(); ok {
+-- 
+2.43.0
+
