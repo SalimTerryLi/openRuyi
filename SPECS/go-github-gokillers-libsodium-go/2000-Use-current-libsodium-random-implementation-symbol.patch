@@ -1,0 +1,29 @@
+From fb98a983c068ed81cf6b7d9f6de28fa947f767da Mon Sep 17 00:00:00 2001
+From: HNO3Miracle <xiangao.or@isrc.iscas.ac.cn>
+Date: Wed, 19 Aug 2026 01:38:48 +0800
+Subject: [PATCH] Use current libsodium random implementation symbol
+
+Signed-off-by: HNO3Miracle <xiangao.or@isrc.iscas.ac.cn>
+---
+ randombytes/randombytes.go | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/randombytes/randombytes.go b/randombytes/randombytes.go
+index 1adc104..bb5719d 100644
+--- a/randombytes/randombytes.go
++++ b/randombytes/randombytes.go
+@@ -74,9 +74,9 @@ func RandomBytesImplementationName() string {
+ 	return C.GoString(C.randombytes_implementation_name())
+ }
+ 
+-// RandomBytesSalsa20Implementation contains a pointer to C.randombytes_salsa20_implementation
++// RandomBytesSalsa20Implementation contains a pointer to C.randombytes_internal_implementation
+ // This means that it can be used as an argument to RandomBytesSetImplementation
+-var RandomBytesSalsa20Implementation *C.struct_randombytes_implementation = &C.randombytes_salsa20_implementation
++var RandomBytesSalsa20Implementation *C.struct_randombytes_implementation = &C.randombytes_internal_implementation
+ 
+ // RandomBytesSysRandomImplementation contains a pointer to C.randombytes_sysrandom_implementation
+ // This means that it can be used as an argument to RandomBytesSetImplementation
+-- 
+2.43.0
+

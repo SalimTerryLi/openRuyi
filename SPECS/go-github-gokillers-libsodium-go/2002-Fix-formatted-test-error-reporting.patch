@@ -1,0 +1,26 @@
+From b56849bedb90b1ac2282f2dcbcb176d6a57d14e8 Mon Sep 17 00:00:00 2001
+From: HNO3Miracle <xiangao.or@isrc.iscas.ac.cn>
+Date: Wed, 19 Aug 2026 01:44:05 +0800
+Subject: [PATCH] Fix formatted test error reporting
+
+Signed-off-by: HNO3Miracle <xiangao.or@isrc.iscas.ac.cn>
+---
+ cryptoaead/crypto_aead_aes256gcm_test.go | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/cryptoaead/crypto_aead_aes256gcm_test.go b/cryptoaead/crypto_aead_aes256gcm_test.go
+index 4afff41..1785f6b 100644
+--- a/cryptoaead/crypto_aead_aes256gcm_test.go
++++ b/cryptoaead/crypto_aead_aes256gcm_test.go
+@@ -48,7 +48,7 @@ func TestCryptoAEADAES256GCM(t *testing.T) {
+ 		// Create a key context
+ 		ctx, err := CryptoAEADAES256GCMBeforeNM(test.Key[:])
+ 		if err != 0 {
+-			t.Error("Context creation failed for %+v", test)
++			t.Errorf("Context creation failed for %+v", test)
+ 		}
+ 
+ 		// Detached encryption test
+-- 
+2.43.0
+
