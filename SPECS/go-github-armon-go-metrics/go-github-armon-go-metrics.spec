@@ -27,11 +27,6 @@ Source0:        https://github.com/armon/go-metrics/archive/refs/tags/v%{version
 BuildArch:      noarch
 BuildSystem:    golangmodules
 
-# Without this patch, the package does not compile against packaged
-# go-immutable-radix v2: iradix.Tree is generic and Get already returns bool,
-# so the old non-generic tree field and type assertion fail. - HNO3Miracle
-Patch2000:      2000-fix-go-immutable-radix-v2-compatibility.patch
-
 BuildRequires:  go
 BuildRequires:  go-rpm-macros
 BuildRequires:  go(github.com/DataDog/datadog-go)
