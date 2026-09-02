@@ -8,12 +8,13 @@
 %define go_import_path  github.com/hashicorp/golang-lru
 
 Name:           go-github-hashicorp-golang-lru
-Version:        2.0.7
+# v2 uses the /v2 import path and is packaged separately.
+Version:        1.0.2
 Release:        %autorelease
 Summary:        Golang LRU cache
 License:        MPL-2.0
 URL:            https://github.com/hashicorp/golang-lru
-#!RemoteAsset
+#!RemoteAsset:  sha256:c26d2390e5cfc6f2d39c3d081b6ed35b0a52caf4066bf3a85624a25367d29173
 Source0:        https://github.com/hashicorp/golang-lru/archive/v%{version}.tar.gz#/%{_name}-%{version}.tar.gz
 BuildArch:      noarch
 BuildSystem:    golangmodules
@@ -33,4 +34,4 @@ LRU cache. It is based on the cache in Groupcache.
 %{go_sys_gopath}/%{go_import_path}
 
 %changelog
-%{?autochangelog}
+%autochangelog
