@@ -8,12 +8,12 @@
 %define go_import_path  github.com/hashicorp/go-immutable-radix
 
 Name:           go-github-hashicorp-go-immutable-radix
-Version:        2.1.0
+Version:        1.3.1
 Release:        %autorelease
 Summary:        An immutable radix tree implementation in Golang
 License:        MPL-2.0
 URL:            https://github.com/hashicorp/go-immutable-radix
-#!RemoteAsset
+#!RemoteAsset:  sha256:a230480398365aa51d06a3082f7038172b515394c6409e96a519b0d17154b5a1
 Source0:        https://github.com/hashicorp/go-immutable-radix/archive/v%{version}.tar.gz#/%{_name}-%{version}.tar.gz
 BuildArch:      noarch
 BuildSystem:    golangmodules
@@ -22,13 +22,11 @@ BuildRequires:  go
 BuildRequires:  go-rpm-macros
 BuildRequires:  go(github.com/hashicorp/go-uuid)
 BuildRequires:  go(github.com/hashicorp/golang-lru)
-BuildRequires:  go(golang.org/x/exp)
 
 Provides:       go(github.com/hashicorp/go-immutable-radix) = %{version}
 
 Requires:       go(github.com/hashicorp/go-uuid)
 Requires:       go(github.com/hashicorp/golang-lru)
-Requires:       go(golang.org/x/exp)
 
 %description
 Provides the iradix package that implements an immutable radix tree
@@ -45,8 +43,8 @@ As a radix tree, it provides the following:
  * Ordered iteration
 
 A tree supports using a transaction to batch multiple updates (insert,
-delete) in a more efficient manner than performing each operation one at
-a time.
+delete) in a more efficient manner than performing each update one at a
+time.
 
 For a mutable variant, see go-radix (https://github.com/armon/go-radix).
 
@@ -56,4 +54,4 @@ For a mutable variant, see go-radix (https://github.com/armon/go-radix).
 %{go_sys_gopath}/%{go_import_path}
 
 %changelog
-%{?autochangelog}
+%autochangelog
