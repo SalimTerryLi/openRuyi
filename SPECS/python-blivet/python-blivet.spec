@@ -7,25 +7,30 @@
 %global srcname blivet
 
 Name:           python-blivet
-Version:        3.13.1
+Version:        3.14.2
 Release:        %autorelease
 Summary:        Blivet is a python module for system storage configuration.
 License:        LGPL-2.1-or-later
 URL:            https://github.com/storaged-project/blivet
-#!RemoteAsset:  sha256:68d981b900f92637c636dfd3d7b93c698b3b1a2112649a95b43bac385f61bf1c
+#!RemoteAsset:  sha256:db2cd996ed354d47fdc60740d912a102250a0fc469bfe17df6bced649c172e5b
 Source0:        https://files.pythonhosted.org/packages/source/b/%{srcname}/%{srcname}-%{version}.tar.gz
 BuildArch:      noarch
-BuildSystem:    autotools
+BuildSystem:    pyproject
+
+BuildOption(install):  %{srcname}
 
 BuildRequires:  make
 BuildRequires:  systemd
 BuildRequires:  gettext
 BuildRequires:  pkgconfig(python3)
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3dist(setuptools)
 
 Requires:       parted
 Requires:       python3-blockdev
 Requires:       python3-bytesize
 Requires:       python3dist(dasbus)
+Requires:       python3dist(packaging)
 Requires:       python3-libmount
 Requires:       python3dist(pygobject)
 Requires:       python3dist(pyparted)
@@ -45,19 +50,18 @@ storage configuration.
 %generate_buildrequires
 %pyproject_buildrequires
 
-# No configure
-%conf
-
+# The dbus service and translation files are installed outside of pyproject.
 %install -a
-%find_lang %{srcname} --generate-subpackages
+make install-dbus DESTDIR=%{buildroot}
+make -C po install DESTDIR=%{buildroot}
+%find_lang %{srcname}
 
 # TODO: check needs ton of other dependencies - 251
 %check
 
-%files -f %{srcname}.lang
+%files -f %{pyproject_files} -f %{srcname}.lang
 %doc README.md ChangeLog examples
 %license COPYING
-%{python3_sitelib}/*
 %{_sysconfdir}/dbus-1/system.d/*
 %{_datadir}/dbus-1/system-services/*
 %{_libexecdir}/*
